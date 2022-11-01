@@ -1,8 +1,8 @@
 import { useEffect,useState } from "react";
 import { useParams } from "react-router-dom";
-//import 'antd/dist/antd.css';
-//import { Spin } from 'antd';
-//import styles from '../App.module.css'
+import 'antd/dist/antd.css';
+import { Spin } from 'antd';
+import styles from '../App.module.css'
 
 function Detail() {
   const { id } = useParams();
@@ -21,9 +21,7 @@ function Detail() {
   return (
     <div>
       {loading?
-      //<div className={styles.example}><Spin/></div>
-      <h1>loading</h1>
-      :
+      <div className={styles.example}><Spin/></div>:
       <div>
         <h1>{movie.data.movie.title}</h1>
         <img src={movie.data.movie.medium_cover_image} alt="" />

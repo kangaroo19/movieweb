@@ -1,8 +1,8 @@
 import { useState,useEffect,useCallback } from "react"
 import Movie from "../components/Movie"
-//import 'antd/dist/antd.css';
-//import { Spin } from 'antd';
-//import styles from '../App.module.css'
+import 'antd/dist/antd.css';
+import { Spin } from 'antd';
+import styles from '../App.module.css'
 
 function Home() {
   const [loading, setLoading] = useState(true);
@@ -22,8 +22,7 @@ function Home() {
   console.log(movies);
   
   return <div>
-    {loading?//<div className={styles.example}><Spin/></div>:
-    <h1>loading4444444</h1>:
+    {loading?<div className={styles.example}><Spin/></div>:
     <div>
       {movies.map((value)=>(
         <Movie
