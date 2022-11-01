@@ -1,0 +1,16 @@
+src폴더는 내 모든 파일들을 넣을 폴더
+한 파일당 한 컴포넌트
+app.js와 index.js 제외하고 src안의 파일 모두 지움
+
+index.js
+
+import React from 'react';
+import ReactDOM from 'react-dom/client';
+import App from './App';
+
+만 남겨놓음
+
+app.js는 모든 import 지움
+
+create-react-app은 클래스 이름을 랜덤하게 바꿔줌
+-->같은 클래스 이름 사용해도 문제될 것이 없음
