@@ -1,4 +1,4 @@
-import { useEffect,useState } from "react";
+import { useEffect,useState,useCallback } from "react";
 import { useParams } from "react-router-dom";
 //import 'antd/dist/antd.css';
 //import { Spin } from 'antd';
@@ -6,18 +6,19 @@ import { useParams } from "react-router-dom";
 
 function Detail() {
   const { id } = useParams();
-  const [loading,setLoading]=useState(true)
-  const [movie,setMovie]=useState(null)
-  const getMovie = async () => {
+  const [loading, setLoading] = useState(true);
+  const [movieData, setMovieData] = useState([]);
+  const getMovie = useCallback(async () => {
     const json = await (
       await fetch(`https://yts.mx/api/v2/movie_details.json?movie_id=${id}`)
     ).json();
-    setLoading(false)
-    setMovie(json)
-  };
+    console.log(json);
+    setMovieData(json);
+    setLoading(false);
+  }, [id]);
   useEffect(() => {
     getMovie();
-  }, []);
+  }, [getMovie]);
   return (
     <div>
       {loading?
@@ -25,9 +26,9 @@ function Detail() {
       <h1>loading</h1>
       :
       <div>
-        <h1>{movie.data.movie.title}</h1>
-        <img src={movie.data.movie.medium_cover_image} alt="" />
-        <p>{movie.data.movie.description_full}</p>
+        <h1>{movieData.data.movie.title}</h1>
+        <img src={movieData.data.movie.medium_cover_image} alt="" />
+        <p>{movieData.data.movie.description_full}</p>
       </div>
       }
     </div>
