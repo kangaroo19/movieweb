@@ -23,7 +23,7 @@ function Home() {
   
   return <div>
     {loading?//<div className={styles.example}><Spin/></div>:
-    <h1>loading123123123</h1>:
+    <h1>loading4444444</h1>:
     <div>
       {movies.map((value)=>(
         <Movie
