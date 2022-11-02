@@ -22,9 +22,11 @@ function Home() {
   console.log(movies);
   
   return (
+    
       <div className={styles.container}>
+
         {loading?<div className={styles.example}><Spin/></div>:
-      <div className={styles.movies}>
+        <div className={styles.movies}>
         {movies.map((value)=>(
           <Movie
             key={value.id}
@@ -34,6 +36,8 @@ function Home() {
             title={value.title} 
             summary={value.summary} 
             genres={value.genres}
+            pre_movie={value}
+            nxt_movie={value}
           />
         ))}
         </div>}

@@ -1,3 +1,5 @@
+/* css 선택자 이름 띄어쓰기 할때 언더바(_)로 표현,소문자만 사용 */
+
 .example{
     min-height: 100vh;
     display: flex;
@@ -7,13 +9,46 @@
     border-radius: 4px;
 }
 .detail_title{
-    margin-top: 100px;
     text-align: center;
+    font-size: 1.6rem;
+    margin-bottom:10px;
 }
 .detail_img{
     text-align: center;
 
 }
+.home_button{
+    position: fixed;
+    top: 10px;
+    left:10px;
+    border:none;
+    font-size: 1.2rem;
+    background-color: rgb(184, 176, 176);
+    border-radius: 5px;
+}
+.home_button:hover{
+    transition: all 0.5s;
+    background-color: bisque;
+}
 .detail_content{
     text-align: center;
 }
+.container{
+    background-color: white;
+    margin:0 auto;
+    width:1090px;
+    position: relative;
+    top:100px;
+    border-radius: 5px;
+    box-shadow: 0 13px 27px -5px rgba(50, 50, 93, 0.25),
+      0 8px 16px -8px rgba(0, 0, 0, 0.3), 0 -6px 16px -6px rgba(0, 0, 0, 0.025);
+}
+.detail_summary_container{
+    margin:0 auto;
+    width:60%;
+}
+@media screen and (max-width: 1090px) {
+    .container {
+      width: 100%;
+    }
+  }
