@@ -4,6 +4,9 @@ import {Link} from 'react-router-dom'
 import 'antd/dist/antd.css';
 import { Spin } from 'antd';
 import styles from './Detail.module.css'
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
+import {faStar} from '@fortawesome/free-regular-svg-icons'
+//import {faStar} from '@fortawesome/free-regular-svg-icons'
 
 function Detail() {
   const { id } = useParams();
@@ -18,12 +21,11 @@ function Detail() {
     setLoading(false)
     setMovie(json)
     setRate(json.data.movie.rating)
-    console.log(json)
   };
-  
   for(let i=0;i<rate-1;i++){
     starIcon[i]='*'
   }
+  console.log(faStar)
   useEffect(() => {
     getMovie();
   }, []);
@@ -32,19 +34,22 @@ function Detail() {
     <div >
       {loading?
       <div className={styles.example}><Spin/></div>:
+      
       <div className={styles.container} >
+        {starIcon.map((value)=>(
+          (value==='*')?<FontAwesomeIcon icon={faStar}/>:null
+        ))}
         <button className={styles.home_button}><Link to={`/movie/`}>Home</Link></button>
         <div className={styles.detail_title}>{movie.data.movie.title}</div>
         <div className={styles.detail_img}>
           <img src={movie.data.movie.medium_cover_image} alt="" />
         </div>
+        
         <div className={styles.detail_content}>
           {`${starIcon.join("")} (${movie.data.movie.rating})`} 
-          {/* {starIcon.join('')+movie.data.movie.rating} */}
           <br/>
           <div className={styles.detail_summary_container}>{movie.data.movie.description_full} </div>             
         </div>
-        <button><Link to={`/movie/46035`}/></button>  
       </div>
       }
     </div>
