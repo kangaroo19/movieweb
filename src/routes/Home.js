@@ -2,7 +2,7 @@ import { useState,useEffect,useCallback } from "react"
 import Movie from "../components/Movie"
 import 'antd/dist/antd.css';
 import { Spin } from 'antd';
-import styles from '../App.module.css'
+import styles from "./Home.module.css"
 
 function Home() {
   const [loading, setLoading] = useState(true);
@@ -21,20 +21,24 @@ function Home() {
   }, [getMovies]);
   console.log(movies);
   
-  return <div>
-    {loading?<div className={styles.example}><Spin/></div>:
-    <div>
-      {movies.map((value)=>(
-        <Movie
-          key={value.id}
-          id={value.id}
-          coverImg={value.medium_cover_image} 
-          title={value.title} 
-          summary={value.summary} 
-          genres={value.genres}
-        />
-      ))}
-      </div>}</div>
+  return (
+      <div className={styles.container}>
+        {loading?<div className={styles.example}><Spin/></div>:
+      <div className={styles.movies}>
+        {movies.map((value)=>(
+          <Movie
+            key={value.id}
+            id={value.id}
+            year={value.year}
+            coverImg={value.medium_cover_image} 
+            title={value.title} 
+            summary={value.summary} 
+            genres={value.genres}
+          />
+        ))}
+        </div>}
+      </div>
+  )
 }
 
 export default Home

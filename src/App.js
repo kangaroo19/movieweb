@@ -27,3 +27,5 @@ export default App;
 //같은 컴포넌트의 리스트를 렌더할때는 key(고유한 값)라는 prop을 넣어줘야함
 
 //Switch 컴포넌트는 한번에 하나의 Route만 랜더링하기 위함
+
+//npm run deploy --> 빌드폴더 생성과 배포가능

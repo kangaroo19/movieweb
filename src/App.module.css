@@ -5,11 +5,3 @@
 .blk{
     display: block;
 }
-.example{
-    min-height: 100vh;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    background: rgba(0, 0, 0, 0.05);
-    border-radius: 4px;
-}
