@@ -43,7 +43,8 @@ function Detail() {
           {/* {starIcon.join('')+movie.data.movie.rating} */}
           <br/>
           <div className={styles.detail_summary_container}>{movie.data.movie.description_full} </div>             
-        </div>  
+        </div>
+        <button><Link to={`/movie/46035`}/></button>  
       </div>
       }
     </div>
