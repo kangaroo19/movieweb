@@ -19,7 +19,7 @@ function Home() {
     setUrl((moviesUrl) => moviesUrl);
     getMovies();
   }, [getMovies]);
-  console.log(movies);
+  //console.log(movies);
   
   return (
     
@@ -27,17 +27,19 @@ function Home() {
 
         {loading?<div className={styles.example}><Spin/></div>:
         <div className={styles.movies}>
-        {movies.map((value)=>(
+        {movies.map((value,index)=>(
           <Movie
             key={value.id}
+            index={index}
             id={value.id}
             year={value.year}
             coverImg={value.medium_cover_image} 
             title={value.title} 
             summary={value.summary} 
             genres={value.genres}
-            pre_movie={value}
-            nxt_movie={value}
+            // prv_movie={movies[index-1]}
+            // nxt_movie={movies[index+1]}
+            movies={movies}
           />
         ))}
         </div>}

@@ -15,7 +15,14 @@
 }
 .detail_img{
     text-align: center;
-
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+}
+.detail_imgs{
+    width:170px;
+    height: 267px;
+    opacity: 0.5;
 }
 .home_button{
     position: fixed;

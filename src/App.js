@@ -15,7 +15,7 @@ function App() {
         <Home/> 
       </Route>
     </Switch>
-  </Router> 
+  </Router>
 )}
 
 export default App;
