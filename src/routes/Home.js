@@ -37,9 +37,6 @@ function Home() {
             title={value.title} 
             summary={value.summary} 
             genres={value.genres}
-            // prv_movie={movies[index-1]}
-            // nxt_movie={movies[index+1]}
-            movies={movies}
           />
         ))}
         </div>}

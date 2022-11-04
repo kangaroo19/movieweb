@@ -1,4 +1,4 @@
-import { useEffect,useState } from "react";
+import { useEffect,useState,useCallback } from "react";
 import { useParams,useLocation } from "react-router-dom";
 import {Link} from 'react-router-dom'
 import 'antd/dist/antd.css';
@@ -10,46 +10,48 @@ import {faHouse} from '@fortawesome/free-solid-svg-icons'
 import {faStar as faStarRegular} from '@fortawesome/free-regular-svg-icons'
 //폰트어썸 같은 아이콘이름인데 속성 바꾸고싶으면 위처럼 사용
 function Detail() {
+  
   const location=useLocation()
-  console.log(location.state.movies)
-  const [index,setIndex]=useState(null)
+  const [index,setIndex]=useState(location.state.index)
+  const [movies,setMovies]=useState([])
   const [prvMovie,setPrvMovie]=useState(null)
   const [nxtMovie,setNxtMovie]=useState(null)
-  const { id } = useParams();
-  const [testId,setTestId]=useState(id)
+  const getMovies = async () => {
+      const json = await (
+      await fetch("https://yts.mx/api/v2/list_movies.json?minimum_rating=8.5&sort_by=year")
+    ).json();
+    setMovies(json.data.movies)
+    setPrvMovie((json.data.movies[index-1]===undefined)?null:json.data.movies[index-1].medium_cover_image)
+    setNxtMovie((json.data.movies[index+1]===undefined)?null:json.data.movies[index+1].medium_cover_image)    
+  }
+  
+  useEffect(()=>{
+    getMovies()  
+  },[index])
+
+  const [{ id },setId] = useState(useParams())
+  
   const [loading,setLoading]=useState(true)
   const [movie,setMovie]=useState(null)
   const [rate,setRate]=useState(0)
-  let starIcon=new Array(10).fill(false)
+
   const getMovie = async () => {
     const json = await (
-      await fetch(`https://yts.mx/api/v2/movie_details.json?movie_id=${testId}`)
+      await fetch(`https://yts.mx/api/v2/movie_details.json?movie_id=${id}`)
     ).json();
-    setIndex(location.state.movies.index) //movie컴포넌트에서 받아온 데이터에 index라는 키 추가
     setLoading(false)
-    setMovie(json)
-    setPrvMovie(location.state.movies[0])
-    setNxtMovie(location.state.movies[1])
+    setMovie(json.data.movie) //여기서 movie값을 줬다고 밑에서도 movie.rating으로 하면 안됨 오류남
     setRate(json.data.movie.rating)
   };
 
-
-  for(let i=0;i<parseInt(rate);i++){ //밑에 map함수에 넣을 수 있을거 같음
-    starIcon[i]=true
-  }
-  
-  const nextClick=()=>{
-    setTestId(nxtMovie.id)
-    //setMovie(nxtMovie)
-  }
-  const prvClick=()=>{
-    setTestId(prvMovie.id)
-    //setMovie(prvMovie)
-  }
   useEffect(() => {
     getMovie();
-  }, [testId]);
+  }, []);
   
+  let starIcon=new Array(10).fill(false)
+  for(let i=0;i<parseInt(rate);i++){ 
+    starIcon[i]=true
+  }
   return (
     <div >
       {loading?
@@ -57,19 +59,19 @@ function Detail() {
       
       <div className={styles.container} >
         <button className={styles.home_button}><Link to={`/movie/`}><FontAwesomeIcon icon={faHouse}/></Link></button>
-        <div className={styles.detail_title}>{movie.data.movie.title}</div>
+        <div className={styles.detail_title}>{movie.title}</div>
         <div className={styles.detail_img}>
-          <img onClick={prvClick} className={styles.detail_imgs} src={prvMovie===undefined?null:prvMovie.medium_cover_image} alt="" />
-          <img src={movie.data.movie.medium_cover_image} alt="" />
-          <img onClick={nextClick} className={styles.detail_imgs} src={nxtMovie===undefined?null:nxtMovie.medium_cover_image} alt="" />
+          <img className={styles.detail_imgs} src={prvMovie} alt="" />
+          <img src={movie.medium_cover_image} alt="" />
+          <img className={styles.detail_imgs} src={nxtMovie} alt="" />
         </div>
         {/* <h2 onClick={onClick}><Link to={`/movie/${(testId)}`}>click</Link></h2> */}
         <div className={styles.detail_content}>
-          {starIcon.map((value)=>(
-            (value)?<FontAwesomeIcon icon={faStar}/>:<FontAwesomeIcon icon={faStarRegular}/>
-          ))} {`(${movie.data.movie.rating})`}
+          {starIcon.map((value,index)=>(
+            (value)?<FontAwesomeIcon key={index} icon={faStar}/>:<FontAwesomeIcon key={index} icon={faStarRegular}/>
+          ))} {`(${movie.rating})`}
           <br/>
-          <div className={styles.detail_summary_container}>{movie.data.movie.description_full} </div>             
+          <div className={styles.detail_summary_container}>{movie.description_full} </div>             
         </div>
       </div>
       }
