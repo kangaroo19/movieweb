@@ -8,16 +8,7 @@
     background-color: #eff3f7;
     border-radius: 4px;
 }
-.detail_skeleton_container{
-    display: flex;
-    justify-content: space-around;
-    align-items: center;
-}
-.detail_skeleton{
-    width:170px;
-    height:267;
-    background-color: rgb(136, 142, 142);
-}
+
 .detail_title{
     text-align: center;
     font-size: 1.6rem;
@@ -64,6 +55,7 @@
     box-shadow: 0 13px 27px -5px rgba(50, 50, 93, 0.25),
       0 8px 16px -8px rgba(0, 0, 0, 0.3), 0 -6px 16px -6px rgba(0, 0, 0, 0.025);
 }
+
 .detail_summary_container{
     margin:0 auto;
     width:60%;

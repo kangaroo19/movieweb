@@ -13,7 +13,6 @@ function Detail() {
   
   const location=useLocation()
   let [index,setIndex]=useState(location.state.index)
-  const [moviesLoading,setMoviesLoading]=useState(true)
   const [movies,setMovies]=useState([])
   const [prvMovie,setPrvMovie]=useState(null)
   const [nxtMovie,setNxtMovie]=useState(null)
@@ -22,10 +21,9 @@ function Detail() {
       const json = await (
       await fetch("https://yts.mx/api/v2/list_movies.json?minimum_rating=8.5&sort_by=year")
     ).json();
-    setMoviesLoading(false)
     setMovies(json.data.movies)
-    setPrvMovie((json.data.movies[index-1]===undefined)?null:json.data.movies[index-1].medium_cover_image)
-    setNxtMovie((json.data.movies[index+1]===undefined)?null:json.data.movies[index+1].medium_cover_image)    
+    setPrvMovie((json.data.movies[index-1]===undefined)?json.data.movies[19].medium_cover_image:json.data.movies[index-1].medium_cover_image)
+    setNxtMovie((json.data.movies[index+1]===undefined)?json.data.movies[0].medium_cover_image:json.data.movies[index+1].medium_cover_image)    
   }
   
   useEffect(()=>{
@@ -51,52 +49,54 @@ function Detail() {
   }, []); //dependency에 값이 없다고 해서 다른곳에서 함수 호출 못하는것은 아님
   
   const prvClick=()=>{
-    if(index===0) return
-    setIndex(--index) //다음 영화 이미지 클릭하면 현재 인덱스값-1
-    getMovie(String(movies[index].id)) //바뀐 인덱스값의 id값이 인자로 들어감
+    if(index===0){  //현재 보고있는 영화가 첫번째 영화일때
+      setIndex(movies.length-1)
+      getMovie(String(movies[movies.length-1].id)) //바뀐 인덱스값의 id값이 인자로 들어감
+
+    }
+    else{
+      setIndex(--index) //다음 영화 이미지 클릭하면 현재 인덱스값-1
+      getMovie(String(movies[index].id)) //바뀐 인덱스값의 id값이 인자 로 들어감
+    }
   }
   const nxtClick=()=>{
-    if(index===movies.length-1) return
-    setIndex(++index)
-    getMovie(String(movies[index].id)) 
+    if(index===movies.length-1){ //현재 보고있는 영화가 마지막 영화일때
+      setIndex(0)
+      getMovie(String(movies[0].id))
+    }
+    else{
+      setIndex(++index)
+      getMovie(String(movies[index].id)) 
+    }
   }
   let starIcon=new Array(10).fill(false)
   for(let i=0;i<parseInt(rate);i++){ 
     starIcon[i]=true
   }
   return (
-    <div >
-      {loading?
-      <div className={styles.spinner}><Spin/></div>:
-      
-      <div className={styles.container} >
-        <button className={styles.home_button}><Link to={`/movie/`}><FontAwesomeIcon icon={faHouse}/></Link></button>
-        <div className={styles.detail_title}>{movie.title}</div>
-       {moviesLoading?
-        <div className={styles.detail_skeleton_container}>
-          <div className={styles.detail_skeleton}></div>
-          <div className={styles.detail_skeleton}></div>
-          <div className={styles.detail_skeleton}></div>
-        </div>
-       :
-        <div className={styles.detail_img}>
+  <div >
+    {loading?
+    <div className={styles.spinner}><Spin/></div>:
+    
+    <div className={styles.container} >
+      <button className={styles.home_button}><Link to={`/movie/`}><FontAwesomeIcon icon={faHouse}/></Link></button>
+      <div className={styles.detail_title}>{movie.title}</div>
+      <div className={styles.detail_img}>
         <img onClick={prvClick} className={styles.detail_imgs} src={prvMovie} alt="" />
         <img src={movie.medium_cover_image} alt="" />
         <img onClick={nxtClick} className={styles.detail_imgs} src={nxtMovie} alt="" />
       </div>
-       }
-        {/* <h2 onClick={onClick}><Link to={`/movie/${(testId)}`}>click</Link></h2> */}
-        <div className={styles.detail_content}>
-          {starIcon.map((value,index)=>(
-            (value)?<FontAwesomeIcon key={index} icon={faStar}/>:<FontAwesomeIcon key={index} icon={faStarRegular}/>
-          ))} {`(${movie.rating})`}
-          <br/>
-          <div className={styles.detail_summary_container}>{movie.description_full} </div>             
-        </div>
+      <div className={styles.detail_content}>
+        {starIcon.map((value,index)=>(
+          (value)?<FontAwesomeIcon key={index} icon={faStar}/>:<FontAwesomeIcon key={index} icon={faStarRegular}/>
+        ))} {`(${movie.rating})`}
+        <br/>
+        <div className={styles.detail_summary_container}>{movie.description_full} </div>             
       </div>
-      }
     </div>
-  );
+    }
+  </div>
+);
 }
 export default Detail;
 
