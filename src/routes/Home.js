@@ -25,7 +25,7 @@ function Home() {
     
       <div className={styles.container}>
 
-        {loading?<div className={styles.example}><Spin/></div>:
+        {loading?<div className={styles.spinner}><Spin/></div>:
         <div className={styles.movies}>
         {movies.map((value,index)=>(
           <Movie

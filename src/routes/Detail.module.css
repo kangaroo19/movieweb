@@ -1,12 +1,22 @@
 /* css 선택자 이름 띄어쓰기 할때 언더바(_)로 표현,소문자만 사용 */
 
-.example{
+.spinner{
     min-height: 100vh;
     display: flex;
     justify-content: center;
     align-items: center;
     background-color: #eff3f7;
     border-radius: 4px;
+}
+.detail_skeleton_container{
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+}
+.detail_skeleton{
+    width:170px;
+    height:267;
+    background-color: rgb(136, 142, 142);
 }
 .detail_title{
     text-align: center;
@@ -23,6 +33,10 @@
     width:170px;
     height: 267px;
     opacity: 0.5;
+}
+.detail_imgs:hover{
+    transition: all 0.8s;
+    opacity: 1;
 }
 .home_button{
     position: fixed;

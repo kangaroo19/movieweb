@@ -1,4 +1,4 @@
-import { useEffect,useState,useCallback } from "react";
+import { useEffect,useState } from "react";
 import { useParams,useLocation } from "react-router-dom";
 import {Link} from 'react-router-dom'
 import 'antd/dist/antd.css';
@@ -12,14 +12,17 @@ import {faStar as faStarRegular} from '@fortawesome/free-regular-svg-icons'
 function Detail() {
   
   const location=useLocation()
-  const [index,setIndex]=useState(location.state.index)
+  let [index,setIndex]=useState(location.state.index)
+  const [moviesLoading,setMoviesLoading]=useState(true)
   const [movies,setMovies]=useState([])
   const [prvMovie,setPrvMovie]=useState(null)
   const [nxtMovie,setNxtMovie]=useState(null)
+  
   const getMovies = async () => {
       const json = await (
       await fetch("https://yts.mx/api/v2/list_movies.json?minimum_rating=8.5&sort_by=year")
     ).json();
+    setMoviesLoading(false)
     setMovies(json.data.movies)
     setPrvMovie((json.data.movies[index-1]===undefined)?null:json.data.movies[index-1].medium_cover_image)
     setNxtMovie((json.data.movies[index+1]===undefined)?null:json.data.movies[index+1].medium_cover_image)    
@@ -27,15 +30,14 @@ function Detail() {
   
   useEffect(()=>{
     getMovies()  
-  },[index])
+  },[index]) //getMovies함수는 index값이 바뀔 때 마다 실행
 
-  const [{ id },setId] = useState(useParams())
-  
+  const {id}=useParams()
   const [loading,setLoading]=useState(true)
   const [movie,setMovie]=useState(null)
   const [rate,setRate]=useState(0)
 
-  const getMovie = async () => {
+  const getMovie = async (id) => { //현재 선택한 영화 정보(내용,별점,타이틀) 보여줌
     const json = await (
       await fetch(`https://yts.mx/api/v2/movie_details.json?movie_id=${id}`)
     ).json();
@@ -43,11 +45,21 @@ function Detail() {
     setMovie(json.data.movie) //여기서 movie값을 줬다고 밑에서도 movie.rating으로 하면 안됨 오류남
     setRate(json.data.movie.rating)
   };
-
-  useEffect(() => {
-    getMovie();
-  }, []);
   
+  useEffect(() => { //처음 페이지 렌더링되면 getMovie 함수 실행
+    getMovie(id);
+  }, []); //dependency에 값이 없다고 해서 다른곳에서 함수 호출 못하는것은 아님
+  
+  const prvClick=()=>{
+    if(index===0) return
+    setIndex(--index) //다음 영화 이미지 클릭하면 현재 인덱스값-1
+    getMovie(String(movies[index].id)) //바뀐 인덱스값의 id값이 인자로 들어감
+  }
+  const nxtClick=()=>{
+    if(index===movies.length-1) return
+    setIndex(++index)
+    getMovie(String(movies[index].id)) 
+  }
   let starIcon=new Array(10).fill(false)
   for(let i=0;i<parseInt(rate);i++){ 
     starIcon[i]=true
@@ -55,16 +67,24 @@ function Detail() {
   return (
     <div >
       {loading?
-      <div className={styles.example}><Spin/></div>:
+      <div className={styles.spinner}><Spin/></div>:
       
       <div className={styles.container} >
         <button className={styles.home_button}><Link to={`/movie/`}><FontAwesomeIcon icon={faHouse}/></Link></button>
         <div className={styles.detail_title}>{movie.title}</div>
-        <div className={styles.detail_img}>
-          <img className={styles.detail_imgs} src={prvMovie} alt="" />
-          <img src={movie.medium_cover_image} alt="" />
-          <img className={styles.detail_imgs} src={nxtMovie} alt="" />
+       {moviesLoading?
+        <div className={styles.detail_skeleton_container}>
+          <div className={styles.detail_skeleton}></div>
+          <div className={styles.detail_skeleton}></div>
+          <div className={styles.detail_skeleton}></div>
         </div>
+       :
+        <div className={styles.detail_img}>
+        <img onClick={prvClick} className={styles.detail_imgs} src={prvMovie} alt="" />
+        <img src={movie.medium_cover_image} alt="" />
+        <img onClick={nxtClick} className={styles.detail_imgs} src={nxtMovie} alt="" />
+      </div>
+       }
         {/* <h2 onClick={onClick}><Link to={`/movie/${(testId)}`}>click</Link></h2> */}
         <div className={styles.detail_content}>
           {starIcon.map((value,index)=>(
