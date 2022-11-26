@@ -19,7 +19,7 @@ function Home() {
     setUrl((moviesUrl) => moviesUrl);
     getMovies();
   }, [getMovies]);
-  //console.log(movies);
+  
   
   return (
     
